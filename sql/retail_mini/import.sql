@@ -67,9 +67,14 @@ CREATE TABLE DIM_DATE (
            SALES_DATE DATE
           );
           
-IMPORT INTO CITIES from local csv file './CITIES.csv';
-IMPORT INTO ARTICLE from local csv file './ARTICLE.csv';
-IMPORT INTO MARKETS from local csv file './MARKETS.csv';
-IMPORT INTO SALES from local csv file './SALES.csv';
-IMPORT INTO SALES_POSITIONS from local csv file './SALES_POSITIONS.csv';
-IMPORT INTO DIM_DATE from local csv file './DIM_DATE.csv';
+          
+          
+CREATE OR REPLACE CONNECTION S3_SAMPLE_BUCKET TO 'https://exasol-test-sample-worksheet.s3.eu-central-1.amazonaws.com';
+          
+IMPORT INTO CITIES from CSV at S3_SAMPLE_BUCKET file 'retail_mini/CITIES.csv';
+IMPORT INTO ARTICLE from CSV at S3_SAMPLE_BUCKET file 'retail_mini/ARTICLE.csv';
+IMPORT INTO MARKETS from CSV at S3_SAMPLE_BUCKET file 'retail_mini/MARKETS.csv';
+IMPORT INTO SALES from CSV at S3_SAMPLE_BUCKET file 'retail_mini/SALES.csv';
+IMPORT INTO SALES_POSITIONS from CSV at S3_SAMPLE_BUCKET file 'retail_mini/SALES_POSITIONS.csv';
+IMPORT INTO DIM_DATE from CSV at S3_SAMPLE_BUCKET file 'retail_mini/DIM_DATE.csv';
+
