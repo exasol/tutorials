@@ -5,6 +5,5 @@ some sample sales data.
 
 The tutorial.sql contains  
 some queries used 
-in the  
-"Exasol Performance Management"  
-course.
+in the course  
+"Exasol Performance Management".
