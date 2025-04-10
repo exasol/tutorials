@@ -14,7 +14,7 @@ CREATE OR REPLACE CONNECTION S3_DATA_CHALLENGE
 TO 'http://exa-data-challenge.s3-eu-central-1.amazonaws.com';
 
 /**
-now its your turn
+now it's your turn
 
 1. load data into the tables. Data is stored under the previously defined S3_DATA_CHALLENGE connection.
 Files are called customer.csv, item.csv, household_demographics.csv and web_sales.csv
