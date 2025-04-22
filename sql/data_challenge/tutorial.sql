@@ -42,7 +42,7 @@ Hint: you can join customer and web_sales data on ws_bill_customer_sk=c_customer
 
 /*
 Q3: Now let's extend Q3 and add the item category to the order
-Hint: you can join web_sales and item data on I_ITEM_SK=I_ITEM_SK
+Hint: you can join web_sales and item data on WS_ITEM_SK=I_ITEM_SK
 Make sure that the categories returned are NOT NULL
 */
 
