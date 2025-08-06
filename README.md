@@ -2,7 +2,7 @@
 
 This project contains tutorials and public training material not directly related to a programming language (in contrast to, for example, the [Exasol Java tutorial](https://github.com/exasol/exasol_java_tutorial).
 
-## Software Development Tipps and Tricks
+## Software Development Tips and Tricks
 
 * [Estimating: better guessing](estimating/estimating.odp) (presentation material and exercises)
 

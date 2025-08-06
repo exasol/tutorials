@@ -8,7 +8,7 @@ Transport Layer Security — or TLS — is the successor to the Secure Socket La
 
 Simply put, TLS is meant to protect network communication against eavesdropping and offers a mechanism to verify that the other end of the connection is the one you intended to reach.
 
-Since people often have a wrong perception, I will stress here that a TLS connection does not protect against malicious intent of your communication partner.
+Since people often have an incorrect interpretation, I will stress here that a TLS connection does not protect against malicious intent of your communication partner.
 
 ## Using TLS for Secure Communication
 
@@ -50,7 +50,7 @@ The OSI model classifies the typical building blocks of technical communication 
 |   2   | Data link layer    | MAC             |                                             |
 |   1   | Physical layer     | Network adapter |                                             |
 
-The most obvious one is the physical layer. Here you find the hardware and the physical communication channel like an optical fiber. The data link layer provides a point-to-point connection between two nodes. The network layer allows you to transfer data to other nodes beyond that direct neighbor. It’s the job of the transport layer to make sure that the data arrives intact on the other side of the communication. Especially if that data is too large to fit into a single transfer unit and needs to be split at the source, correctly reassembled at the sink.
+The most obvious one is the physical layer. Here, you find the hardware and the physical communication channel like an optical fiber. The data link layer provides a point-to-point connection between two nodes. The network layer allows you to transfer data to other nodes beyond that direct neighbor. It’s the job of the transport layer to make sure that the data arrives intact on the other side of the communication. This is applicable especially when that data is too large to fit into a single transfer unit and needs to be split at the source, correctly reassembled at the sink.
 
 The session layer is responsible for managing the connection state between communication partners. TLS has a session concept — so a part of TLS lives in this layer. The presentation layer is a translator between what the application expects and what the lower layers provide. In the case of TLS, this means encryption and decryption of application data.
 
@@ -75,11 +75,11 @@ This layered approach means that when Alice sends an HTTPS request to Bob's serv
 
 ## The Life Cycle of a TLS Connection
 
-The following sections will touch the most important aspects of a TLS connection. Please note, the details can be very tricky, and for many of the steps there are multiple possible variants — for example, different encryption algorithms can be used.
+The following sections will touch the most important aspects of a TLS connection. Please note, the details can be very tricky, and for many of the steps, there are multiple possible variants — for example, different encryption algorithms can be used.
 
 ### Initial Connection
 
-Before TLS comes into play, we need an IP and a TCP connection between the two communication partners. That means that a TLS connection first starts via an unsecured connection.
+Before TLS comes into play, we need an IP and a TCP connection between the two communication partners. This means that a TLS connection first starts via an unsecured connection.
 
 As a consequence, the communication partners need to remember all messages they exchange and verify them later.
 
@@ -89,13 +89,13 @@ Before Alice and Bob can start their actual conversation, they first need to est
 
 Alice and Bob add random data and a timestamp to the first messages of the communication to prevent so-called "replay attacks." In a replay attack, Eve records a communication and tries to take over the next one by replaying the recorded messages. Since the random data and timestamp change each time, Eve’s attack fails.
 
-Now the communication partners establish each other’s authenticity — or to be more precise — they should. We’ll get to that in a minute. For now, you only need to be aware that the goal of this step is to make sure that the communication partners are who they claim to be. The driving technology behind this step is called public-key cryptography or asymmetric cryptography.
+Now, the communication partners establish each other’s authenticity — or to be more precise — they should. We’ll get to that in a minute. For now, you only need to be aware that the goal of this step is to make sure that the communication partners are who they claim to be. The driving technology behind this step is called public-key cryptography or asymmetric cryptography.
 
-Think of a box with a lock that needs two keys — one for locking it and one for unlocking it. Bob can give copies of the locking key to anyone he likes, Alice, for example. As long as Bob keeps the other key, only he can open the box to get out what other people put in.
+Think of a box with a lock that needs two keys — one for locking it and one for unlocking it. Bob can give copies of the locking key to anyone he likes — like Alice, for example. As long as Bob keeps the other key, only he can open the box to get out what other people put in.
 
-In cryptographic terms we speak of a private key and a public key. As the name suggests, Bob needs to keep the private key secret and can share the other one. Bob could theoretically post the public key on Twitter without compromising security. But there are better ways to do this, and we will discuss them later.
+In cryptographic terms, we speak of a private key and a public key. As the name suggests, Bob needs to keep the private key secret and can share the other one. Bob could theoretically post the public key on Twitter without compromising security. But, there are better ways to do this, and we will discuss them later.
 
-Asymmetric cryptography works nicely for authenticating a communication partner. Conceptually, Alice creates a piece of data that is hard enough to guess (for example, a really large random number) and asks Bob to encrypt it with Bob’s private key. Bob then sends the result back. Alice uses Bob’s public key to decrypt the data and compare the result with the original data. If the data matches, Alice knows she is talking to Bob. The details are, of course, more complicated in reality. But as a first approximation, this example is good enough.
+Asymmetric cryptography works nicely for authenticating a communication partner. Conceptually, Alice creates a piece of data that is hard enough to guess (for example, a really large random number) and asks Bob to encrypt it with Bob’s private key. Bob then sends the result back. Alice uses Bob’s public key to decrypt the data and compare the result with the original data. If the data matches, Alice knows she is talking to Bob. The details are, of course, more complicated in reality. But, as a first approximation, this example is good enough.
 
 ### Key Exchange
 
@@ -107,7 +107,7 @@ The symmetric key is what we call the 'session key' as it is created each time y
 
 ### Payload Transfer, Overheads, and True Cost of Keeping Alive a TLS Connection
 
-By now you should have realized that there is a lot of TLS magic going on long before you can transfer any of your actual data payload via a TLS secured channel. Let's assume Alice wants to send a Twitter message from her Twitter client via TLS. The tweet she wrote has 135 bytes. How much overhead do you think it did take to send that single tweet?
+By now, you should have realized that there is a lot of TLS magic going on long before you can transfer any of your actual data payload via a TLS-secured channel. Let's assume Alice wants to send a Twitter message from her Twitter client via TLS. The tweet she wrote has 135 bytes. How much overhead do you think it would take to send that single tweet?
 
 Many Kilobytes — most of them invested into the part before we switched to symmetric encryption. Once you realize this, it becomes painfully obvious that going through the full cycle for each message would be a phenomenal waste of resources.
 
@@ -145,17 +145,17 @@ If Alice wants to communicate securely with ten people, collecting their individ
 
 Digital signatures like their analog counterparts are meant to verify the authenticity of the information they accompany.
 
-In real life you sign a letter so that your handwriting can serve as proof you wrote it. If you additionally want to make sure that tampering with the text in the letter is detectable, you write the whole letter by hand[^1].
+In real life, you sign a letter so that your handwriting can serve as proof you wrote it. If you additionally want to make sure that tampering with the text in the letter is detectable, you write the whole letter by hand[^1].
 
 [^1]: I am aware that there are people who specialize in forging handwriting. That just shows that in the physical world security is also a challenge. 
 
-If Bob wants to digitally sign data, he first calculates a tamper-proof representation of that data using a cryptographic hash function. That proof is calculated from the contents of the data payload. The chosen algorithm does not allow reversing the process with any realistic effort. That means while Alice will be able to calculate representation from the payload, Eve can't create any meaningful data out of the number. This irreversible property is why cryptographic hash functions are also called 'one-way hash functions' — you can easily go from input to output, but not the other way around. Bob then uses his private key to encrypt the one-way hash and puts it alongside the payload data.
+If Bob wants to digitally sign data, he first calculates a tamper-proof representation of that data using a cryptographic hash function. That proof is calculated from the contents of the data payload. The chosen algorithm does not allow reversing the process with any realistic effort. That means —while Alice will be able to calculate representation from the payload — Eve can't create any meaningful data out of the number. This irreversible property is why cryptographic hash functions are also called 'one-way hash functions' — you can easily go from input to output, but not the other way around. Bob then uses his private key to encrypt the one-way hash and puts it alongside the payload data.
 
 For practical reasons, the representation is, of course, small compared to the original data. It's communication overhead after all.
 
 Alice, after receiving the payload and signature, can now calculate the hash on her own based on the payload data. She then uses Bob’s public key to decrypt the hash in the signature. If the hashes Alice and Bob calculated match, the payload data is accurate and consistent.
 
-Note that signatures only work towards the information security goal of integrity. Without any further measures they don’t do anything for confidentiality of the payload data.
+Note that signatures only work towards the information security goal of integrity. Without any further measures, they don’t do anything for confidentiality of the payload data.
 
 ### Certificates and Certification Agencies
 
@@ -188,7 +188,7 @@ While this can result in a lot of extra work, it eliminates the first two trust 
 
 ### Certificates can’t Tell you Whether a Service is Legitimate
 
-At this point we need to clear up one of the biggest misunderstandings in the way secure communication works today.
+At this point, we need to clear up one of the biggest misunderstandings in the way secure communication works today.
 
 Certificates tell you whether the entity you’re communicating with is who they claim to be. Certificates can’t tell you whether the service is legitimate.
 
@@ -204,7 +204,7 @@ Think about it:
 * What if the issue holder uses the certificate to host someone else’s malicious service?
 * What if a legit service was hijacked by an attacker?
 
-What the CAs really verify is that someone paid for their certificates. Preferably, with a credit card. While that might help law enforcement agencies to find the person behind a scam, it does nothing to protect you when you establish a TLS connection. You might find it consoling that some responsible people are put behind bars, but your data and potentially money are already gone by that time.
+What the CAs really verify is that someone paid for their certificates. Preferably, with a credit card. While that might help law enforcement agencies to find the person behind a scam, it does nothing to protect you when you establish a TLS connection. You might find it consoling that some perpetrators are put behind bars, but your data and potentially money are already gone by that time.
 
 A TLS server certificate tells you whether the hostname of the server matches the one in the certificate. Period.
 
@@ -214,11 +214,11 @@ If you understood that fact, you will also understand why certificates issued by
 
 ### Client Certificates
 
-One more part of authentication that we haven’t touched yet is authentication in the opposite direction. The reason for this is that in almost all cases servers don’t use TLS to establish the client's authenticity but mechanisms on the application layer like a login and a session ID or tokens.
+One more part of authentication that we haven’t touched yet is authentication in the opposite direction. The reason for this is that in almost all cases servers don’t use TLS to establish the client's authenticity but mechanisms on the application layer — like a login and a session ID or tokens.
 
-TLS supports client certificates, but they are seldom used. Mostly because of the [too-many-keys problem](#the-too-many-keys-problem) we discussed earlier. Services typically do not trust public CAs enough to accept client certificates issued by someone outside their own organization.
+TLS supports client certificates, but they are seldom used. This is mostly because of the [too-many-keys problem](#the-too-many-keys-problem) that we discussed earlier. Services typically do not trust public CAs enough to accept client certificates issued by someone outside their own organization.
 
-That being said, there are cases where client certificates are indeed useful. Mainly in machine-to-machine communication. IT departments often use their own CAs to issue client certificates that they hand out to developers of applications that access company services via TLS. The application then has to present its client certificate during the handshake phase. Only if the service can successfully authenticate the client via its client certificate, will it accept the TLS connection.
+That being said, there are cases where client certificates are indeed useful — mainly in machine-to-machine communication. IT departments often use their own CAs to issue client certificates that they hand out to developers of applications that access company services via TLS. The application then has to present its client certificate during the handshake phase. Only if the service can successfully authenticate the client via its client certificate will it accept the TLS connection.
 
 ### Truststores and Keystores
 
@@ -250,7 +250,7 @@ The designers of TLS knew that existing algorithms could not be secure forever, 
 
 Client and server negotiate which suite and version to use by comparing which ones both support and picking the best available option.
 
-The important part here is to follow the announcements in the IT security field and make sure that all deployments use and accept only TLS versions and ciphers that are still considered hard enough. The TLS configuration on a modern machine allows you to forbid the client and server to use deprecated versions.
+The important part here is to follow the announcements in the IT security field and make sure that all deployments use and accept only TLS versions and ciphers that are still considered computationally robust enough. The TLS configuration on a modern machine allows you to forbid the client and server to use deprecated versions.
 
 August 2025 TLS 1.3 is the industry standard, and older versions (including TLS 1.2) should not be used anymore!
 
@@ -260,4 +260,4 @@ Please take a look at OWASPS's ["Transport LayerSecurity Cheat Sheet"](https://c
 
 In this article, we discussed what TLS is and what you use it for. We learned about the difference between symmetric and asymmetric encryption and why the latter is only used during the phase in which the connection gets established. We covered certificates, keystores, and truststores in the context of authentication.
 
-In the next part we’ll build on this information and see where — and how — [TLS comes into play when using Exasol’s analytics database](tls_with_exasol.md).
+In the next part, we’ll build on this information and see where — and how — [TLS comes into play when using Exasol’s analytics database](tls_with_exasol.md).
