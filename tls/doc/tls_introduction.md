@@ -52,7 +52,7 @@ The OSI model classifies the typical building blocks of technical communication 
 
 The most obvious one is the physical layer. Here, you find the hardware and the physical communication channel like an optical fiber. The data link layer provides a point-to-point connection between two nodes. The network layer allows you to transfer data to other nodes beyond that direct neighbor. It’s the job of the transport layer to make sure that the data arrives intact on the other side of the communication. This is applicable especially when that data is too large to fit into a single transfer unit and needs to be split at the source, correctly reassembled at the sink.
 
-The session layer is responsible for managing the connection state between communication partners. TLS has a session concept — so a part of TLS lives in this layer. The presentation layer is a translator between what the application expects and what the lower layers provide. In the case of TLS, this means encryption and decryption of application data.
+The session layer is responsible for managing the connection state between communication partners. TLS has a session concept — so a part of the TLS protocol lives in this layer. The presentation layer is a translator between what the application expects and what the lower layers provide. In the case of TLS, this means encryption and decryption of application data.
 
 The table above shows an example of an HTTPS connection. While you can see that the association between protocols and most layers is clear, TLS affects parts of both the session and presentation layer.
 
