@@ -71,7 +71,7 @@ The table above shows an example of an HTTPS connection. While you can see that 
 - Data compression and decompression (when enabled)
 - Converting between different data formats as needed
 
-This layered approach means that when Alice sends an HTTPS request to Bob's server, the application data first gets encrypted by TLS's presentation layer functions. While the session layer functions ensure the secure connection is properly maintained throughout the communication.
+This layered approach means that when Alice sends an HTTPS request to Bob's server, the application data first gets encrypted by TLS's presentation layer functions. Meanwhile, the session layer functions ensure the secure connection is properly maintained throughout the communication.
 
 ## The Life Cycle of a TLS Connection
 
@@ -163,7 +163,7 @@ Public key cryptography uses a chain of certificates to solve the problem of est
 
 Alice uses a web browser to surf to Bob’s web page that is served via TLS. When she installed her computer, a lot of certificates were automatically installed too. Alice trusts the maker of that installation program to provide authentic certificates. These certificates were issued by a number of well-known organizations called Certification Agencies (CAs).
 
-Bob’s server presents its certificate to Alice’s client, and that client first checks whether it knows the certificate or not. The client realizes that it does not. Next, the client checks Bob’s server certificate for chaining information. If available, the client follows the chain down to a certificate that is installed on Alice’s machine. Luckily, Bob’s certificate is signed by ACME CA, a certification agency for which a certificate is pre-installed on the client machine. After it used, the key provided in the ACME CA certificate to check the signature, the client application tells Alice that the certificate for Bob’s server is valid. And, that the hostname of Bob’s web page and Bob’s certificate match. Alice can now securely surf Bob’s page.
+Bob’s server presents its certificate to Alice’s client, and that client first checks whether it knows the certificate or not. The client realizes that it does not. Next, the client checks Bob’s server certificate for chaining information. If available, the client follows the chain down to a certificate that is installed on Alice’s machine. Luckily, Bob’s certificate is signed by ACME CA — a certification agency for which a certificate is pre-installed on the client machine. Afterwards, Alice's client application uses the key provided in the ACME CA certificate to validate the certificate of Bob's server and that the hostname and certificate match. Her client returns that they are valid. Alice can now securely surf Bob’s page.
 
 ### Pre-installed CAs and the Trust Problem
 
@@ -224,7 +224,7 @@ That being said, there are cases where client certificates are indeed useful —
 
 The words "keystore" and "truststore" are often used as synonyms. This is not precise. Truststores are a specific subset of keystores containing someone else’s public keys or certificates. If you install root CA certificates on a machine, they go into a truststore.
 
-In the Java world the distinction is very strict. When the official documentation says "keystore," it really only refers to the place where you store your own keys.
+> [!TIP] In the Java world the distinction is very strict. When the official documentation says "keystore," it really only refers to the place where you store your own keys.
 
 ### Disabling authentication
 
@@ -242,7 +242,7 @@ IT security evolves. Both the defensive part and the attacker side. Some mechani
 
 How can this happen?
 
-Remember when we said that cryptography is based on the idea that reversing it is needs to be hard enough? We now have a lot more computing power in our hands, and new mathematical algorithms still are invented that reduce the effort of the calculations involved from unrealistic to manageable. Also, the designers of security mechanisms are human and as such sometimes plant fundamental flaws in a design that make an update unavoidable.
+Remember when we said that cryptography is based on the idea that reversing it needs to be hard enough? We now have a lot more computing power in our hands, and new mathematical algorithms still are invented that reduce the effort of the calculations involved from unrealistic to manageable. Also, the designers of security mechanisms are human and as such sometimes plant fundamental flaws in a design that make an update unavoidable.
 
 There is a long list of evolutionary steps that TLS and its predecessor SSL underwent that brought new hash algorithms, plugged design holes, or introduced new features required for new communication channels.
 

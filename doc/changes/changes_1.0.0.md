@@ -6,4 +6,4 @@ In version 1.0.0, we moved the non-programming-language-specific part of the exi
 
 ## Documentation
 
-* #10: Move TLS t
+* #10: Moved language-agnostic part of the TLS tutorial from `exasol-java-tutorials` to `tutorials` and updated it.
