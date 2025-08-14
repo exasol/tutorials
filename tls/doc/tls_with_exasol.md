@@ -7,12 +7,16 @@ We covered the [basics of Transport Layer Security (TLS)](tls_introduction.md) i
 
 ## UDFs are Different
 
-In a later article in this series we will take a close look at [using TLS inside User Defined Functions (UDFs)](tls_in_udfs.md). For now, all you need to know is that UDFs run in a sandbox that prevents them from using seeing and using files from the host operating system. While that makes UDFs more secure, it unfortunately means extra installation and configuration effort for users. We will only briefly touch on UDFs here. Please read the in-depth article on [TLS in UDFs](tls_in_udfs.md) for more details.
+A "User Defined Function" (short "UDF") allows users to extend Exasol with functions that can be called in SQL statements. It is an extension mechanism designed to add custom logic in SQL. Let's assume your company has a complicated way to calculate a metric, but that calculation is already implemented in a Python library. You can write Python UDF, call the library inside that UDF and reuse the existing code. Exasol also supports other languages in UDFs (e.g., Java and R). We don't want to dive too deep into that topic of what you can do with UDFs here, because that is out of the scope of this article. What is relevant here is that some UDFs need to open network connections and that you usually want to secure them with TLS. 
+
+In a later article in this series we will take a close look at [using TLS inside User Defined Functions (UDFs)](tls_in_udfs.md). For now, all you need to know is that UDFs run in a sandbox that prevents them from using seeing and using files from the host operating system. While that makes UDFs more secure, it unfortunately means extra installation and configuration effort for users. 
+
+Please read the in-depth article on [TLS in UDFs](tls_in_udfs.md) for more details.
 
 ## Incoming TLS Connections
 
 [Exasol Admin](https://docs.exasol.com/db/latest/administration/on-premise/admin_interface/admin_ui_overview.htm) (Exasol 8 and later), 
-[EXAOperation](https://docs.exasol.com/db/7.1/administration/aws/admin_interface/exaoperation.htm) (pre Exasol 8) and [BucketFS](https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm) are probably the first touchpoints users have with Exasol. Exasol Admin runs on HTTPS (i.e. HTTP + TLS) by default and BucketFS supports both HTTP and HTTPS. And, of course, HTTPS is the only suitable choice unless you’re running development tests.
+[EXAOperation](https://docs.exasol.com/db/7.1/administration/aws/admin_interface/exaoperation.htm) (pre Exasol 8) and [BucketFS](https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm) are probably the first touchpoints users have with Exasol. Exasol Admin runs on HTTPS (i.e. HTTP + TLS) by default, and BucketFS supports both HTTP and HTTPS. And, of course, HTTPS is the only suitable choice unless you’re running development tests.
 
 This diagram shows two incoming TLS connections:
 
@@ -25,7 +29,7 @@ This diagram shows two incoming TLS connections:
 
 To allow incoming connections from the start, Exasol comes preloaded with a default server certificate. Once you open a browser connection to that machine, your browser will display a warning that the connection isn’t secure. There are two reasons for this:
 
-1. The certificate is self-signed, so your machine does not recognize it 
+1. The certificate is self-signed, so your client does not recognize it 
 2. Exasol can’t predict where the certificate is going to be hosted, so the hostname is left blank in the certificate
 
 ### The Chicken-or-the-egg Problem of Secure Connections
@@ -50,7 +54,10 @@ Depending on the certificate issuer, outgoing TLS connections can either be as e
 
 ### Services With Certificates Issued by a Popular CA
 
-If an application on your Exasol cluster wants to connect to the public application programming interface (API) of a service with a certificate signed by a popular CA – like one of those that come preloaded in most truststores – there is little to do. The TLS connection should work out of the box. The TLS client can verify the server certificate by following the certificate chain down to that known root CA.
+If an application on your Exasol cluster wants to connect to the public application programming interface (API) of a
+service, there is little to do if that service uses a certificate signed by a popular CA. These are the CAs that come
+preloaded in most truststores. The TLS connection should work out of the box in this case. The TLS client can verify the
+server certificate by following the certificate chain down to that known root CA.
 
 ### Services With Certificates Issued by a Custom CA
 
