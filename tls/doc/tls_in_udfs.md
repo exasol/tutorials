@@ -2,18 +2,27 @@
 
 ## Before you Start
 
-If you haven't already, I recommend you read our ["TLS introduction"](tls_in_udfs.md) to familiarize yourself with the basic concepts of TLS.
+If you haven't already, I recommend you read our ["TLS introduction"](tls_introduction.md) to familiarize yourself with the basic concepts of TLS.
+
+Then, please read the article ["TLS with Exasol"](tls_with_exasol.md) as a primer on where Exasol expects TLS certificates to be installed.
 
 You should also learn about Exasol's [BucketFS](https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm) filesystem.
 
-## Prerequisites TODO
+### A Concrete Example With Java
+
+To make the tutorial hands-on, you will have interactive parts that demonstrate TLS certificate handling with Java.
+
+Why Java? 
+
+First, we have a ready-to-use UDF in Java that lists certificates. Second, Java certificate handling is the hardest one. If you manage that, the other ones will be no problem for you.
+
+## Prerequisites
 
 You will need:
 
 1. A Java Development Kit (JDK 11 or later, we recommend [OpenJDK](https://openjdk.org/install/))
 2. `keytool` program (comes with the JDK)
-3. [`curl`](https://curl.se/) to access BucketFS and download file from the internet
-
+3. [`curl`](https://curl.se/) to access BucketFS and download files from the internet
 
 ## UDFs
 
@@ -31,7 +40,7 @@ All UDFs require such a language container — except Lua UDFs, since Lua is emb
 
 ## Running UDFs
 
-Whenever you run an SQL statement that contains a UDF, Exasol starts the corresponding language container. This serves both as a runtime environment and as a sandbox at the same time. Everything the UDF does happens inside the running container. Once the statement's execution is complete, Exasol terminates the container.
+Whenever you run an SQL statement that contains a UDF, Exasol starts the corresponding language container. This serves both as a runtime environment and as a sandbox. Everything the UDF does happens inside the running container. Once the statement's execution is complete, Exasol terminates the container.
 
 ## Certificate Validation in UDFs
 
@@ -59,7 +68,8 @@ The [Java tutorial comes with a UDF](https://github.com/exasol/exasol-java-tutor
 7. Reference the entry class with the `%scriptclass` directive
 8. Run the UDF inside a `SELECT` statement
 
-For your convenience, here is the complete SQL code for the steps above that need to be taken in a SQL client.
+For your convenience, here is the complete SQL code for the steps above that need to be executed in an SQL client.
+
 ```sql
 CREATE SCHEMA JAVA_TUTORIAL;
 
@@ -84,7 +94,7 @@ Here are the first few rows of an example output.
 | AffirmTrust Commercial         | AffirmTrust                |          | US       | Fri Jan 29 15:06:06 CET 2010   | Tue Dec 31 15:06:06 CET 2030  |
 | &hellip;                       | &hellip;                   | &hellip; | &hellip; | &hellip;                       | &hellip;                      |
 
-This script is especially helpful if you want to find out, which CA certificates are available in your UDF.
+This script is especially helpful if you want to find out which CA certificates are available in your UDF.
 
 It goes without saying that if a certificate is missing, trust chains based on it cannot be verified and access to corresponding services will fail.
 
@@ -96,9 +106,12 @@ You can see in which time frame the certificate is valid in the columns `VALID_A
 
 If you want your UDF to connect to a service on your own premises, chances are that the corresponding TLS certificate was issued by your own CA or your organization's CA for that matter.
 
-Now things are starting to get interesting. One thing is for sure, you won't find that certificate in the language container — unless you are planning to build your own, but that has its own learning curve and would also go way beyond the scope of this tutorial.
+This is where it gets interesting. You won't find that certificate in the language container. You could build your own
+container, but that requires additional expertise and is beyond this tutorial's scope.
 
 A better way to use your own certificates with UDFs is to create a truststore in [BucketFS](https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm). BucketFS is a distributed filesystem that makes files available to all data nodes on an Exasol cluster. It is also the only filesystem accessible from a UDF, except the read-only filesystem of the language container.
+
+In short, you upload something to BucketFS on a node of your choosing, and Exasol takes care of copying the files to all other nodes in the background. 
 
 ### An Example Truststore For This Tutorial
 
@@ -122,7 +135,7 @@ curl -O https://letsencrypt.org/certs/isrgrootx1.pem
 keytool -import -file 'isrgrootx1.pem' -alias 'ISRG_Root_X1' -keystore "$truststore_file"
 ```
 
-You have to provide a password now to protect your new keystore. For this tutorial simply use `tutorial`. Obviously in a real world scenario, you would generate a non-guessable password with your favorite password manager.
+You have to provide a password now to protect your new keystore. For this tutorial simply use `tutorial`. In a real-world scenario, you would generate a non-guessable password with your favorite password manager, of course.
 
 The directory now contains the downloaded PEM file and the truststore that we just created. You can verify that the truststore only contains the certificate we just imported like this:
 
@@ -130,7 +143,7 @@ The directory now contains the downloaded PEM file and the truststore that we ju
 keytool -list -keystore "$truststore_file"
 ```
 
-This is what you should see (import date will be different in your case of course):
+Below is an example of what you should see. The import date will be different in your case, of course.
 
 ```
 Keystore type: PKCS12
@@ -196,6 +209,10 @@ At this point you should see only the one entry that we added to our new trustst
 |--------------|----------------------------------|-----|-----|
 | ISRG Root X1 | Internet Security Research Group |     | US  |
 
+Can you guess where the other certificates went?
+
+They are, of course, still there. But "overriding" the trust store means that you explicitly pick the one you put into BucketFS, so that the Java runtime ignores the one that comes with the SLC. In the case of on-prem installations, that is exactly the behavior you are aiming for, since it provides maximum security. Trust only what you control.
+
 ### Trust Store Password and Protecting the Truststore
 
 If you followed the tutorial closely to that point, you might have wondered about the significance of the truststore password. Is it dangerous that you need to know it? Should you change the default password?
@@ -204,27 +221,30 @@ Let's start by looking at what you want to protect here. IT security always fall
 
 Availability is not our main concern here, since as long as Exasol runs, BucketFS is available. And if Exasol is down, BucketFS availability is the least of your problems.
 
-By definition certificates are public information. If your protection scheme depends on keeping certificates confidential, your process is broken. That means there is no point in protecting the certificates from being read.
+By definition, certificates are public information. If your protection scheme depends on keeping certificates confidential, your process is broken. That means there is no point in protecting the certificates from being read.
 
-Integrity on the other hand matters here. If an attacker manages to sneak a malicious certificate into your truststore, your certificate validation process is compromised.
+Integrity, on the other hand, matters here. If an attacker manages to sneak a malicious certificate into your truststore, your certificate validation process is compromised.
 
 Does the truststore password help here? Not really. Since the same password is used for reading and writing, you cannot keep it completely secret. That would only be the case if the truststore itself used asymmetric encryption. So if the truststore password isn't the answer, you need to protect the file instead.
 
 In an operating system this is usually achieved by restricting write access to the truststore to privileged users. You can emulate this for UDFs.
 
-1. [Create a private bucket](https://docs.exasol.com/db/latest/database_concepts/bucketfs/create_new_bucket_in_bucketfs_service.htm) that only privileged users (e.g. the DBA) have write access to
+1. [Create a private bucket](https://docs.exasol.com/db/latest/database_concepts/bucketfs/create_new_bucket_in_bucketfs_service.htm) that only privileged users (e.g., the DBA) have write access to
 2. Chose a non-guessable write-password for the bucket
 3. Chose a non-guessable read-password for the bucket that differs from the write-password
 4. [Create a connection object for the bucket](https://docs.exasol.com/db/latest/database_concepts/bucketfs/database_access.htm) with the read-password
 5. [Grant access to the connection object](https://docs.exasol.com/db/latest/sql/grant.htm?Highlight=connection) to the users that will use the truststore in their UDFs
 6. Upload the truststore file to that bucket using the write-password
 
-In summary, we propose to live with a simple truststore password and to refer to the items in the list above in order to gain an acceptable level of security.
+In summary, we propose to live with a simple truststore password and to refer to the items in the list above to gain an acceptable level of security.
+
 ## Summary
 
-* User Defined Functions run in a sandbox.
+* User Defined Functions run in a sandbox. 
 * The only filesystem the sandbox sees is BucketFS.
-* If you want to use your own Certification Agency (CA), we recommend that you generate a new Java truststore that only contains the CAs you trust.
+* If you want to use your own Certification Agency (CA), we recommend that you generate a new truststore that only contains the CAs you trust.
 * Upload it to a private bucket, create a connection object to allow UDFs to read it.
 * Then grant access to that connection object to users who should be allowed to use that UDF.
-* Use the `CERTIFICATES` function from this tutorial to verify your installation of the truststore.
+
+> [!Tip]
+> For Java UDFs, use the `CERTIFICATES` function from this tutorial to verify your installation of the truststore.
