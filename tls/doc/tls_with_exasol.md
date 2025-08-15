@@ -7,16 +7,16 @@ We covered the [basics of Transport Layer Security (TLS)](tls_introduction.md) i
 
 ## UDFs are Different
 
-A "User Defined Function" (short "UDF") allows users to extend Exasol with functions that can be called in SQL statements. It is an extension mechanism designed to add custom logic in SQL. Let's assume your company has a complicated way to calculate a metric, but that calculation is already implemented in a Python library. You can write Python UDF, call the library inside that UDF and reuse the existing code. Exasol also supports other languages in UDFs (e.g., Java and R). We don't want to dive too deep into that topic of what you can do with UDFs here, because that is out of the scope of this article. What is relevant here is that some UDFs need to open network connections and that you usually want to secure them with TLS. 
+A User Defined Function (UDF) allows users to extend Exasol with custom functions that can be invoked directly from SQL statements. It is an extension mechanism designed to add custom logic in SQL. Let's assume your company has a complicated way of calculating a metric, but that calculation is already implemented in a Python library. You can write Python UDF, call the library inside that UDF and reuse the existing code. Exasol also supports other languages in UDFs (e.g., Java and R). We don't want to dive too deep into that topic of what you can do with UDFs here, because that is out of the scope of this article. What is relevant here is that some UDFs need to open network connections, and you usually want to secure those connections with TLS. 
 
-In a later article in this series we will take a close look at [using TLS inside User Defined Functions (UDFs)](tls_in_udfs.md). For now, all you need to know is that UDFs run in a sandbox that prevents them from using seeing and using files from the host operating system. While that makes UDFs more secure, it unfortunately means extra installation and configuration effort for users. 
+In a later article in this series, we will take a close look at [using TLS inside User Defined Functions (UDFs)](tls_in_udfs.md). For now, all you need to know is that UDFs run in a sandbox, which prevents them from accessing files on the host operating system. While that makes UDFs more secure, it unfortunately means extra installation and configuration effort for users. 
 
 Please read the in-depth article on [TLS in UDFs](tls_in_udfs.md) for more details.
 
 ## Incoming TLS Connections
 
 [Exasol Admin](https://docs.exasol.com/db/latest/administration/on-premise/admin_interface/admin_ui_overview.htm) (Exasol 8 and later), 
-[EXAOperation](https://docs.exasol.com/db/7.1/administration/aws/admin_interface/exaoperation.htm) (pre Exasol 8) and [BucketFS](https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm) are probably the first touchpoints users have with Exasol. Exasol Admin runs on HTTPS (i.e. HTTP + TLS) by default, and BucketFS supports both HTTP and HTTPS. And, of course, HTTPS is the only suitable choice unless you’re running development tests.
+[EXAOperation](https://docs.exasol.com/db/7.1/administration/aws/admin_interface/exaoperation.htm) (pre Exasol 8) and [BucketFS](https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm) are probably the first touchpoints for users of Exasol. Exasol Admin runs on HTTPS (i.e. HTTP + TLS) by default, and BucketFS supports both HTTP and HTTPS. And, of course, HTTPS is the only suitable choice unless you’re running development tests.
 
 This diagram shows two incoming TLS connections:
 
@@ -42,7 +42,7 @@ The graphic below shows an example of a simple on-premise installation in a sing
 
 ### Exasol TLS Certificate Installation (On-premise)
 
-You can be reasonably sure with on-premise that it takes a matter of minutes to replace the certificate — and that no one will interfere.
+With on-premise setups, you can be reasonably sure that replacing the certificate takes only a few minutes — and that no one will interfere.
 
 However, if you plan to expose one or more of Exasol’s services to the internet, you need to install a proper certificate first and then open your firewall.
 
@@ -65,7 +65,7 @@ When you want to connect Exasol to a service that has a certificate issued by yo
 
 1. If you run an Exasol cluster, all data nodes must know the custom root CA — the certificate must be installed on all nodes 
 2. [User Defined Functions (UDFs) can’t access the standard truststore](tls_in_udfs.md) as they run in an environment that only gives them very restricted file system access 
-3. The truststores the UDF container sees by default are installed with the [Script Language Containers (SLCs)](https://github.com/exasol/script-languages-release) that means that getting in different certificates means either building custom language containers or completely overriding the truststore
+3. The truststores visible to the UDF container by default are those installed with the [Script Language Containers (SLCs)](https://github.com/exasol/script-languages-release) which means that adding different certificates requires either building custom language containers or completely overriding the truststore
 
 A Script Language Container is the environment UDFs run in. They serve as security sandbox just as much as they provide a runtime.
 
@@ -87,7 +87,7 @@ Most of the connections that you will import from are JDBC connections, and in t
 
 ##### Cluster Nodes and Truststores
 
-Exasol distributes work across cluster nodes. While that is what you want of a performance database, it also means that the import can and will run on any of the data nodes in the cluster. So installing the certificates properly for an import means you need to install them on **all** cluster nodes.
+Exasol distributes work across cluster nodes. While this is desirable for a high-performance database, it also means that an import can run on any of the data nodes in the cluster. Therefore, installing certificates properly for an import requires installing them on **all** cluster nodes.
 
 There are several ways to achieve this.
 
@@ -113,7 +113,7 @@ This is the point where things get really complicated. As mentioned before, UDFs
 
 In a scenario where you need both — let's say you want to use a Virtual Schema — you have different options.
 
-Remember that if UDF and EXALoader only need to connect to servers that use a TLS certificate signed by a CA that is in the default trust stores, you don't have to do anything.
+Remember, if UDF and EXALoader only need to connect to servers that use a TLS certificate signed by a CA already included in the default truststores, no additional action is required.
 
 If, on the other hand, you want to use your own CA, we recommend that you install the certificates twice. In the host filesystem of each data node, so that the EXALoader can see it as described in the section ["Data Import Using the EXALoader"](#data-import-using-the-exaloader). And additionally in BucketFS as described in ["TLS with UDFs"](tls_in_udfs.md).
 
@@ -123,4 +123,4 @@ There are other options like using symlinks from Buckets to the host file system
 
 TLS with Exasol is simple as long as the CA certificates required are shipped with Exasol (and the language containers).
 
-If you want to use certificates singed by your own CA for an Exasol cluster, you need to install those certificates. [UDFs run in a container, so special effort is needed to install certificates for them](tls_in_udfs.md).
+If you want to use certificates signed by your own CA for an Exasol cluster, you need to install those certificates. [UDFs run in a container, so special effort is needed to install certificates for them](tls_in_udfs.md).

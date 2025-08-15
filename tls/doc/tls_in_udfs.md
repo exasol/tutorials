@@ -26,7 +26,7 @@ You will need:
 
 ## UDFs
 
-A User Defined Function (short "UDF") is a way to extend the Exasol database with new features that can be called from within Exasol SQL statements. Basically, a UDF is a program that runs on the Exasol cluster in the context of an SQL query. The UDF gets its parameters from the SQL statement, and its return values can be used by other parts of the query.
+A User Defined Function (UDF) allows users to extend the Exasol database with custom functions that can be invoked directly from SQL statements. Basically, a UDF is a program that runs on the Exasol cluster in the context of an SQL query. The UDF gets its parameters from the SQL statement, and its return values can be used by other parts of the query.
 
 Each UDF runs in a sandbox that only lives in the context of a single statement. This ensures that a UDF can't be used to escape the boundaries of the statement it belongs to and prevents data leakage.
 
@@ -61,7 +61,7 @@ The [Java tutorial comes with a UDF](https://github.com/exasol/exasol-java-tutor
    ```shell
    curl -v -X PUT http://w:<write-password>@<host>:2580/default/tls-tutorial.jar -T tls-tutorial/target/tls-tutorial.jar
    ```
-   Note that you need to replace the write-password and host with their actual values.
+   Note that you need to replace the `<write-password>` and `<host>` with their actual values.
 4. Create a database schema `TLS_TUTORIAL` where you can put the UDF with `CREATE SCHEMA`
 5. Register the UDF with `CREATE SCRIPT` 
 6. Reference the uploaded JAR with the `%jar` directive in the script definition
@@ -111,7 +111,7 @@ container, but that requires additional expertise and is beyond this tutorial's 
 
 A better way to use your own certificates with UDFs is to create a truststore in [BucketFS](https://docs.exasol.com/db/latest/database_concepts/bucketfs/bucketfs.htm). BucketFS is a distributed filesystem that makes files available to all data nodes on an Exasol cluster. It is also the only filesystem accessible from a UDF, except the read-only filesystem of the language container.
 
-In short, you upload something to BucketFS on a node of your choosing, and Exasol takes care of copying the files to all other nodes in the background. 
+In short, you upload something to BucketFS on a node of your choice, and Exasol takes care of copying the files to all other nodes in the background. 
 
 ### An Example Truststore For This Tutorial
 
@@ -121,7 +121,7 @@ The [Let's Encrypt Organization](https://letsencrypt.org) has a nice [page where
 
 The shell script below goes through the following steps:
 
-1. Creates a directory where we store the files for our experiments
+1. Create a directory where we store the files for our experiments
 2. Change to the directory
 3. Download the [ISRG Root X1 certificate](https://letsencrypt.org/certs/isrgrootx1.pem) from the Let's Encrypt website in PEM format
 4. Create a new truststore and import the ISRG Root X1 certificate
@@ -236,15 +236,15 @@ In an operating system this is usually achieved by restricting write access to t
 5. [Grant access to the connection object](https://docs.exasol.com/db/latest/sql/grant.htm?Highlight=connection) to the users that will use the truststore in their UDFs
 6. Upload the truststore file to that bucket using the write-password
 
-In summary, we propose to live with a simple truststore password and to refer to the items in the list above to gain an acceptable level of security.
+In summary, we propose using a simple truststore password while relying on the measures listed above to achieve an acceptable level of security.
 
 ## Summary
 
 * User Defined Functions run in a sandbox. 
-* The only filesystem the sandbox sees is BucketFS.
-* If you want to use your own Certification Agency (CA), we recommend that you generate a new truststore that only contains the CAs you trust.
-* Upload it to a private bucket, create a connection object to allow UDFs to read it.
-* Then grant access to that connection object to users who should be allowed to use that UDF.
+* BucketFS is the only filesystem visible to the sandbox.
+* If you want to use your own Certificate Authority (CA), we recommend generating a new truststore containing only the CAs you trust.
+* Upload it to a private bucket and create a connection object to allow UDFs to read it.
+* Then grant access to that connection object to the users who should be allowed to use that UDF.
 
 > [!Tip]
 > For Java UDFs, use the `CERTIFICATES` function from this tutorial to verify your installation of the truststore.
