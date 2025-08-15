@@ -1,4 +1,4 @@
-# Exasol Tutorial 1.0.0, released 2025-08-??
+# Exasol Tutorial 1.0.0, released 2025-08-15
 
 Code name: TLS Tutorial
 
