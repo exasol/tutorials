@@ -94,15 +94,15 @@ That leaves us with messages that require hidden knowledge to decipher them. Oft
 
 Let's look at some examples from popular products:
 
-> "Error 0x80004005: Unspecified error." (Microsoft Windows)
+> "Error 0x80004005: Unspecified error."[^5] (Microsoft Windows)
 
 How likely is it that the developer who raised the error did not know the error condition. Not very, right? After all, they had to actively add the code in some place. What is missing here is the effort to explain what happened instead of raising an internal error code. 
 
-> "The Finder can’t complete the operation because some data in ‘…’ can’t be read or written. (Error code -36)" (macOS Finder)
+> "The Finder can’t complete the operation because some data in ‘…’ can’t be read or written. (Error code -36)"[^6] (macOS Finder)
 
 Which operation? What kind of data? What can I do about it? Apple is usually known for taking usability seriously. So the lesson learned from this example is that message design must be part of the mandatory code reviews. I can hardly imagine that his kind of sloppy phrasing could have escaped the eyes of an experienced reviewer.
 
-![Something unexpected happened. Reporting this problem will help us understand it better. You can wait a bit and try again or restart your device. That may help. Code: 0xC002001B](error_something_happend.png "Something unexpected happened")
+![Something unexpected happened. Reporting this problem will help us understand it better. You can wait a bit and try again or restart your device. That may help. Code: 0xC002001B](error_something_happend.png "Something unexpected happened")[^7]
 
 The only (weak) excuse for this particular error message might be that the error was security relevant and the authors were afraid they might disclose information that could be used to attack the system. While over-sharing is a real problem in software design, there must be a better formulation of the problem that is still secure. If I got this kind of error message, I would be very tempted to play around with the software to see if there is a vulnerability behind this enigma.
 
@@ -176,7 +176,9 @@ There are also clear red lines in message design. Some information simply has no
 
 ### Mind the OpSec
 
-The first category is anything that weakens operational security. Passwords, access tokens, session secrets, private keys, and similar data must never appear in a message. Not even partially if that partial value helps an attacker. If such information reaches the screen, we have turned a usability problem into a security incident.
+The first category is anything that weakens operational security. Passwords, access tokens, session secrets, private keys, and similar data must never appear in a message. Not even partially if that partial value helps an attacker. If such information reaches the screen, we have turned a usability problem into a security incident[^2][^3][^4].
+
+Stack traces are also a typical OpSec issue. Especially when error messages contain stack traces, those can reveal internal knowledge about an application or its underlying infrastructure that can enable attacks. In fact, that is such a common problem that OWASP has a whole article[^1] on testing whether a stack trace slipped through the cracks. We know though stack traces can be an important debug tool. As a rule of thumb, stack traces must not reach the end users. If you log them, make sure that the log is only visible for users with administrator privileges, since they know the setup anyway. Often, though, it is better to suppress stack traces in production software completely. I know that this is a controversial standpoint, but OpSec outweighs developer convenience.
 
 ### Respect Privacy
 
@@ -214,7 +216,7 @@ A well-designed log allows you to find out what happened after it did.
 
 Logs are still the main means to investigate problems with software that runs non-interactively, multi-user software, and anything that has a distributed architecture. We already discussed that error messages put users under stress. Multiply that with the number of lines in a log when you are forced to debug a problem under time pressure.
 
-Depending on how much thought went into the log design, the debugging session will either end with a user happy that they found the root cause of an issue quickly or angry at the wasted their time deciphering gibberish. Even in the age of LLMs, you first design goal must be to serve the person reading the log.
+Depending on how much thought went into the log design, the debugging session will either end with a user happy that theyF[ found the root cause of an issue quickly or angry at the wasted their time deciphering gibberish. Even in the age of LLMs, you first design goal must be to serve the person reading the log.
 
 ### Target Audiences by Log-Level
 
@@ -382,7 +384,7 @@ If in doubt, go back to the [checklist](#checklist) and design the message your 
 
 [^3]: Dawid Moczadło. 2023-10-24. **Escalating debug mode in Django to RCE, SSRF, SQLi**. https://blog.vidocsecurity.com/blog/escalation-of-debug-mode-in-django
 
-[^4]:Greg Scharf. 2023-04-09. **LFI to RCE in Flask Werkzeug Application**. https://blog.gregscharf.com/2023/04/09/lfi-to-rce-in-flask-werkzeug-application/
+[^4]: Greg Scharf. 2023-04-09. **LFI to RCE in Flask Werkzeug Application**. https://blog.gregscharf.com/2023/04/09/lfi-to-rce-in-flask-werkzeug-application/
 
 [^5]: Microsoft Learn. 2024-05-24. **Error Code 0x80004005 unspecified**. https://learn.microsoft.com/en-us/answers/questions/3858444/error-code-0x80004005-unspecifed
 
@@ -390,7 +392,7 @@ If in doubt, go back to the [checklist](#checklist) and design the message your 
 
 [^7]: Eddie Mendoza Jr. 2025-04-20. **Fix Microsoft Store Error Code 0xC002001B on Windows PC**. https://www.windowsdispatch.com/fix-microsoft-store-error-code-0xc002001b-windows-10-11/**
 
-[^8]: Eric S. Raymond. 2003. **The Art of Unix Programming, Chapter 1: Philosophy Matters**. Rule of Silence: "When a program has nothing surprising to say, it should say nothing." http://www.catb.org/esr/writings/taoup/html/ch01s06.html [[1]](http://www.catb.org/esr/writings/taoup/html/ch01s06.html)
+[^8]: Eric S. Raymond. 2003. **The Art of Unix Programming, Chapter 1: Philosophy Matters**. Rule of Silence: "When a program has nothing surprising to say, it should say nothing." http://www.catb.org/esr/writings/taoup/html/ch01s06.html
 
 [^9]: Georg P. Loczewski. n.d. **User Interface Hall of Shame**. http://hallofshame.gp.co.at/
 
