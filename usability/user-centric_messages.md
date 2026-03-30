@@ -12,7 +12,7 @@ We can do better than this. All it requires is investing a little bit of learnin
 
 ## Use Messages Sparingly
 
-We live in a world where there is a constant battle for the attention of a user. Developers are not marketing people. Our aim is to help and protect our users, so the first question in your design process for every message you plan in our application must be: should it exist?
+We live in a world where there is a constant battle for the attention of a user. Developers are not marketing people. Our aim is to help and protect our users, so the first question in your design process for every message you plan in your application must be: should it exist?
 
 Intentional software design optimizes user experience by not interrupting the flow of the user if it is not strictly necessary. Every one of us knows applications that pop up "did you know?" style messages that no one asked for. We are not going to make the same mistake.
 
@@ -21,7 +21,7 @@ If you come to the conclusion that you *really* need to communicate something to
 The more intrusive the message is, the more effort you should spend trying to avoid it. Pop-up dialogs in particular are the last option after you ruled out anything else.
 
 > [!INFO]
-> Did you notice that many popular commandline tools print out nothing if they succeed. That's not laziness on the part of the developer, but good design. [Success is expected](#the-rule-of-silence). 
+> Did you notice that many popular command-line tools print out nothing if they succeed. That's not laziness on the part of the developer, but good design. [Success is expected](#the-rule-of-silence). 
 
 ## Who is the Audience
 
@@ -33,7 +33,7 @@ Developers often have the tendency to write application messages for themselves,
 
 ### Different Channels, Different Readers
 
-When you are identifying your target audience, the easiest are [UI pop-ups or status messages](#ui-messages-and-pop-ups). Those are always for the end users because they are the only ones who get to see them. I am not counting situations where an end user attaches a screenshot of such a pop-up to a helpdesk ticket here, because if that happens, it is a very clear indicator that the message was not helpful.
+When you are identifying your target audience, the easiest are [UI pop-ups or status messages](#ui-messages-and-pop-ups). Those are always for the end users because they are the only ones who get to see them. I am not counting situations where an end user attaches a screenshot of such a pop-up to a help desk ticket here, because if that happens, it is a very clear indicator that the message was not helpful.
 
 Note that an application administrator is still an end user.
 
@@ -102,13 +102,13 @@ How likely is it that the developer who raised the error did not know the error 
 
 Which operation? What kind of data? What can I do about it? Apple is usually known for taking usability seriously. So the lesson learned from this example is that message design must be part of the mandatory code reviews. I can hardly imagine that his kind of sloppy phrasing could have escaped the eyes of an experienced reviewer.
 
-![Something unexpected happened. Reporting this problem will help us understand it better. You can wait a bit and try again or restart your device. That may help. Code: 0xC002001B](error_something_happend.png "Something unexpected happened")[^7]
+![Something unexpected happened. Reporting this problem will help us understand it better. You can wait a bit and try again or restart your device. That may help. Code: 0xC002001B](error_something_happened.png "Something unexpected happened")[^7]
 
 The only (weak) excuse for this particular error message might be that the error was security relevant and the authors were afraid they might disclose information that could be used to attack the system. While over-sharing is a real problem in software design, there must be a better formulation of the problem that is still secure. If I got this kind of error message, I would be very tempted to play around with the software to see if there is a vulnerability behind this enigma.
 
 ## End-User Messages
 
-End-user messages are part of the user interface, and user interfaces exist to help people get work done. That means we should treat every message as a potential interruption of the user's flow.
+End-user messages are part of the user interface, and user interfaces exist to help people getting work done. That means we should treat every message as a potential interruption of the user's flow.
 
 Interrupting a user is expensive. It breaks concentration, creates uncertainty, and turns attention away from the actual task. So the default position for end-user messages should be restraint. If the user can continue safely without being disturbed, let them continue.
 
@@ -138,7 +138,7 @@ The message also withholds context that the user absolutely needs. Why did this 
 
 Even the window close button is a trap. Does clicking 'X' mean 'Cancel'? Does it dismiss the dialog? Does it continue the close operation? The user should not have to run a small experiment to find out.
 
-Last but not least, while the default button 'Close' is safe, it is not in line with the user intent. `Yes` would have been the correct design choice.
+Last but not least, while the default button 'Close' is safe, it is not in line with the user intent. 'Yes' would have been the correct design choice.
 
 So this pop-up manages to do almost everything wrong at once: wrong visual category, vague buttons, missing context, and unclear consequences. It interrupts the user at a sensitive moment and then turns a simple decision into guesswork.
 
@@ -148,15 +148,15 @@ With modern auto-save implemented properly, the user should never have to see th
 
 Let's fix the mess we saw in the last dialog and focus on what users read first: the buttons.
 
-'Save and Exit, 'Exit Without Saving' and 'Stay in Excel' tell the user what will happen if they choose a button. We are very clear here, so we prepared for the very real user impulse to immediately click a fast to make the dialog got away.   
+'Save and Exit, 'Exit Without Saving' and 'Stay in Excel' tell the user what will happen if they choose a button. We are very clear here, so we prepared for the very real user impulse to immediately click fast to make the dialog got away.   
 
 ![Improved Excel exit dialog with unsaved changes, save location details and clear action buttons](pop-up_save_fixed.png "Improved exit confirmation dialog for Excel")
 
-I did not mention it in the last section because it was not important there, but proper dialog design also must make sure that all buttons are keyboard-navigable. Only `Yes` had a keyboard shortcut in the original example.
+I did not mention it in the last section because it was not important there, but proper dialog design also must make sure that all buttons are keyboard-navigable. Only 'Yes' had a keyboard shortcut in the original example.
 
 ### Console Output Is Still User Communication
 
-Console applications have a bad habit of making developers forget that they still have a user interface. The absence of windows and buttons does not change that. The command line is still a UI, and whatever an application prints to it is still user communication.
+Console applications have a bad habit of making developers forget that they still have a user interface. The absence of windows and buttons does not change that. The command line is still a UI, and whatever an application outputs is still user communication.
 
 This is where developer psychology often blurs the lines between application output and logs. After all, the console feels technical. We run commands there, we inspect stack traces there, and many of us are used to dumping internal details onto a terminal during development. But the fact that developers are trained at reading noisy output does not make it good design.
 
@@ -178,7 +178,7 @@ There are also clear red lines in message design. Some information simply has no
 
 The first category is anything that weakens operational security. Passwords, access tokens, session secrets, private keys, and similar data must never appear in a message. Not even partially if that partial value helps an attacker. If such information reaches the screen, we have turned a usability problem into a security incident[^2][^3][^4].
 
-Stack traces are also a typical OpSec issue. Especially when error messages contain stack traces, those can reveal internal knowledge about an application or its underlying infrastructure that can enable attacks. In fact, that is such a common problem that OWASP has a whole article[^1] on testing whether a stack trace slipped through the cracks. We know though stack traces can be an important debug tool. As a rule of thumb, stack traces must not reach the end users. If you log them, make sure that the log is only visible for users with administrator privileges, since they know the setup anyway. Often, though, it is better to suppress stack traces in production software completely. I know that this is a controversial standpoint, but OpSec outweighs developer convenience.
+Stack traces are also a typical OpSec issue. Especially when error messages contain stack traces, those can reveal internal knowledge about an application or its underlying infrastructure that can enable attacks. In fact, that is such a common problem that OWASP has a whole article[^1] on testing whether a stack trace slipped through the cracks. We know stack traces can be an important debug tool though. As a rule of thumb, stack traces must not reach the end users. If you log them, make sure that the log is only visible for users with administrator privileges, since they know the setup anyway. Often, though, it is better to suppress stack traces in production software completely. I know that this is a controversial standpoint, but OpSec outweighs developer convenience.
 
 ### Respect Privacy
 
@@ -188,7 +188,7 @@ The second category is private data never intended for that user. That includes 
 
 The third category is humor that can age badly, miss the mood, or simply make the situation worse. When users see a warning or error, they are usually trying to get unstuck. This is not the best moment for a developer to test their comedy career. A joke that lands poorly makes the application feel careless. If you are in doubt, leave it out. Some people argue that end-user error messages should never contain humor at all, and they have a point.
 
-Here is an example of an attempt at humor, that even if you allow, it does not land. I have seen the GitHub unicorn many times. And so did everyone else who frequents GitHub. I would like to relplace that unicorn with a lemming.
+Here is an example of an attempt at humor, that even if you allow, it does not land. I have seen the GitHub unicorn many times. And so did everyone else who frequents GitHub. I would like to replace that unicorn with a lemming.
 
 ![The Unicorn everyone gets to see: GitHub timeout messages](the_unicorn_everyone_meets.png)
 
@@ -202,7 +202,7 @@ The message tells the user what the system cannot do, but not what they should d
 
 A better phrasing would be:
 
-> I can help with attendance and timesheet records. Unfortunately, I cannot help with approval workflows. Please check the user guide on how to approve timesheets or contact our support team.
+> I can help with attendance and time sheet records. Unfortunately, I cannot help with approval workflows. Please check the user guide on how to approve time sheets or contact our support team.
 
 That being said, if you build a chatbot into your application, back it with the user guide. Even when it cannot solve the problem directly, it can at least point the user to the right section instead of leaving them at a dead end.
 
@@ -216,13 +216,13 @@ A well-designed log allows you to find out what happened after it did.
 
 Logs are still the main means to investigate problems with software that runs non-interactively, multi-user software, and anything that has a distributed architecture. We already discussed that error messages put users under stress. Multiply that with the number of lines in a log when you are forced to debug a problem under time pressure.
 
-Depending on how much thought went into the log design, the debugging session will either end with a user happy that theyF[ found the root cause of an issue quickly or angry at the wasted their time deciphering gibberish. Even in the age of LLMs, you first design goal must be to serve the person reading the log.
+Depending on how much thought went into the log design, the debugging session will either end with a user happy that they found the root cause of an issue quickly or angry as they wasted their time deciphering gibberish. Even in the age of LLMs, your first design goal must be to serve the person reading the log.
 
 ### Target Audiences by Log-Level
 
-Logs have multiple audiences, ranging from the end users, application administrators, system admins, support staff all the way down to the developer who wrote the software. As a result, log designers need to deal with the unavoidable conflict of interest between those groups. Or if you prefer a more positive perspective, we need to solve an optimization problem.
+Logs have multiple audiences, ranging from the end users, application administrators, system administrators, support staff all the way down to the developer who wrote the software. As a result, log designers need to deal with the unavoidable conflict of interest between those groups. Or if you prefer a more positive perspective, we need to solve an optimization problem.
 
-Luckily, the developers of old came up with the concept of log levels to help the rest of us target our log messages correctly. A typical accepted log level hierachy has `FATAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` and `TRACE`. There are, of course, many variants out there, but the general idea is the same.
+Luckily, the developers of old came up with the concept of log levels to help the rest of us target our log messages correctly. A typical accepted log level hierarchy has `FATAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` and `TRACE`. There are, of course, many variants out there, but the general idea is the same.
 
 Not only do these levels express criticality, they are also a valuable tool in our belt to decide what goes into the log message.
 
@@ -244,7 +244,7 @@ A useful rule of thumb is this: every log entry should justify its existence. If
 
 #### Level INFO Needs Special Care
 
-Messages on log level `INFO` must be crafted especially carefully. This is usually the lowest log level enabled on production systems. Unlike `WARNING`, `ERROR` or `FATAL` it exists to allow logging information under normal operating conditions. And that's why it is easy to overdo it. As a rule of thumb, never log repetative information on level `INFO`. If you feel that something should be logged, keep it compact and relevant.
+Messages on log level `INFO` must be crafted especially carefully. This is usually the lowest log level enabled on production systems. Unlike `WARNING`, `ERROR` or `FATAL` it exists to allow logging information under normal operating conditions. And that's why it is easy to overdo it. As a rule of thumb, never log repetitive information on level `INFO`. If you feel that something should be logged, keep it compact and relevant.
 
 Here is an example of the connection message that `remotelog-lua` adds at the first log line. Since that will be in all logs, it must be important information.
 
