@@ -192,7 +192,7 @@ Here is an example of an attempt at humor, that even if you allow, it does not l
 
 But of course, there is always a worse example. This one is from HiBoB and straight up mocking the user.
 
-![img.png](img.png)
+![img.png](hibob_attempts_humor.png)
 
 This is a dead end with a wink.
 
@@ -218,9 +218,9 @@ Depending on how much thought went into the log design, the debugging session wi
 
 ### Target Audiences by Log-Level
 
-Logs have multiple audiences, ranging from the end users, application administrators, system admins, support staff all the way down to the developer who wrote the software. As a result, log designers need to deal with the unavoidable conflict of interest between those groups. Or if you prefer a more positive perspective, we need to solve an optimization problem.  
+Logs have multiple audiences, ranging from the end users, application administrators, system admins, support staff all the way down to the developer who wrote the software. As a result, log designers need to deal with the unavoidable conflict of interest between those groups. Or if you prefer a more positive perspective, we need to solve an optimization problem.
 
-Luckily, the developers or old came up with the concept of log levels to help the rest of us target our log messages correctly. A typical accepted log level hirachy has `FATAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` and `TRACE`. There are, of course, many variants out there, but the general idea is the same.
+Luckily, the developers of old came up with the concept of log levels to help the rest of us target our log messages correctly. A typical accepted log level hierachy has `FATAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG` and `TRACE`. There are, of course, many variants out there, but the general idea is the same.
 
 Not only do these levels express criticality, they are also a valuable tool in our belt to decide what goes into the log message.
 
@@ -230,21 +230,19 @@ In most applications the default log level is `INFO` or sometimes `WARNING`. Thi
 
 As developers, our first instinct is often to treat anything labeled `DEBUG` as developer-only. In practice, that is frequently not the case.
 
-At `TRACE` level, implementation-level detail is entirely appropriate._
+At `TRACE` level, implementation-level detail is entirely appropriate.
 
 ### The Rule of Silence
 
 A good log does not narrate everything the application does. It records what matters. The rule of silence[^8] means that expected success usually does not need a log entry. Silence is not neglect. It is restraint in service of relevance.
 
-Every extra line competes with the important ones. If we log too much, failures, unusual conditions, and meaningful decisions get buried in routine chatter. A log then stops helping and starts slowing people down. That is why compactness is a design goal. Smaller logs are easier to scan, store, and transfer, but more importantly, they leave room for the interesting parts to stand out.
+Every extra line competes with the important ones. If we log too much, failures, unusual conditions, and meaningful decisions get buried in routine chatter. Smaller logs are easier to scan, store, and transfer, but more importantly, they leave room for the interesting parts to stand out.
 
 A useful rule of thumb is this: every log entry should justify its existence. If removing it makes it harder to understand a problem later, keep it. If removing it only makes the log more compact, remove it.
 
-The more disciplined we are about silence, the more informative the remaining log becomes. A log must not drown the interesting parts in irrelevance.
-
 #### Level INFO Needs Special Care
 
-Messages on log level INFO must be crafted especially carefully. This is usually the lowest log level enabled on production systems. Unlike `WARNING`, `ERROR` or `FATAL` it exists to allow logging information under normal operating conditions. And that's why it is easy to overdo it. As a rule of thumb, never log repetative information on level `INFO`. If you feel that something should be log, keep it compact and relavant.
+Messages on log level `INFO` must be crafted especially carefully. This is usually the lowest log level enabled on production systems. Unlike `WARNING`, `ERROR` or `FATAL` it exists to allow logging information under normal operating conditions. And that's why it is easy to overdo it. As a rule of thumb, never log repetative information on level `INFO`. If you feel that something should be logged, keep it compact and relevant.
 
 Here is an example of the connection message that `remotelog-lua` adds at the first log line. Since that will be in all logs, it must be important information.
 
@@ -264,7 +262,7 @@ Detailed step-by-step tracing belongs on `TRACE` or in rare cases on `DEBUG`, no
 
 ### Text Logs
 
-Text logs still have a place in the 21st century because they are an accessibility feature. Text logs have minimal requirements when it comes to reading them. A console and `less` are all you need when nothing else is at hand. A fact that is especially helpful if you have to debug via a remote shell.
+Text logs still have a place in the 21st century because they are an accessibility feature. Text logs have minimal requirements when it comes to reading them. A console and the `less` command are all you need when nothing else is at hand. A fact that is especially helpful if you have to debug via a remote shell.
 
 If you need to work with larger text logs, `grep` and `awk` are our trusty tools that run everywhere.
 
@@ -320,7 +318,7 @@ The funny part is that even if you just use `less`, the message gets more readab
 
 ### Review Messages Like Other Product Decisions
 
-There is an occupation called 'technical writer.' These people are trained in communication technical information to users. A job that is a lot harder than it looks because it requires that the tech writers put themselves into the shoes of the users. If your organization has tech writers, get their support.
+There is an occupation called 'technical writer.' These people are trained in communicating technical information to users. A job that is a lot harder than it looks because it requires that the tech writers put themselves into the shoes of the users. If your organization has tech writers, get their support.
 
 They can take over message design, but in the spirit of "teach a man to fish" it is better when they train the developers to write their own messages and review the results.
 
