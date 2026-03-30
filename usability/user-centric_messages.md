@@ -384,11 +384,11 @@ If in doubt, go back to the [checklist](#checklist) and design the message your 
 
 [^4]:Greg Scharf. 2023-04-09. **LFI to RCE in Flask Werkzeug Application**. https://blog.gregscharf.com/2023/04/09/lfi-to-rce-in-flask-werkzeug-application/
 
-[^5] Microsoft Learn. 2024-05-24. **Error Code 0x80004005 unspecified**. https://learn.microsoft.com/en-us/answers/questions/3858444/error-code-0x80004005-unspecifed
+[^5]: Microsoft Learn. 2024-05-24. **Error Code 0x80004005 unspecified**. https://learn.microsoft.com/en-us/answers/questions/3858444/error-code-0x80004005-unspecifed
 
-[^6] Apple Community. 2026-02-17. **Finder can't complete the operation**. https://discussions.apple.com/thread/255975031
+[^6]: Apple Community. 2026-02-17. **Finder can't complete the operation**. https://discussions.apple.com/thread/255975031
 
-[^7] Eddie Mendoza Jr. 2025-04-20. **Fix Microsoft Store Error Code 0xC002001B on Windows PC**. https://www.windowsdispatch.com/fix-microsoft-store-error-code-0xc002001b-windows-10-11/**
+[^7]: Eddie Mendoza Jr. 2025-04-20. **Fix Microsoft Store Error Code 0xC002001B on Windows PC**. https://www.windowsdispatch.com/fix-microsoft-store-error-code-0xc002001b-windows-10-11/**
 
 [^8]: Eric S. Raymond. 2003. **The Art of Unix Programming, Chapter 1: Philosophy Matters**. Rule of Silence: "When a program has nothing surprising to say, it should say nothing." http://www.catb.org/esr/writings/taoup/html/ch01s06.html [[1]](http://www.catb.org/esr/writings/taoup/html/ch01s06.html)
 
