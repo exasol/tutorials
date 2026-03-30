@@ -1,4 +1,4 @@
-# Exasol Tutorial 1.1.0, released 2026-03-??
+# Exasol Tutorial 1.1.0, released 2026-03-30
 
 Code name: User-centric Messages
 
