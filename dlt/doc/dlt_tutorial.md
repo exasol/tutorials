@@ -20,17 +20,19 @@ pip install dlt
 
 ## 🏁 2. Initialize a New Pipeline
 
+Create a new folder for your project.
+
+``` bash
+mkdir dlt-tutorial
+cd dlt-tutorial
+```
+
 Use the `chess` source and `sqlalchemy` destination:
 
 ``` bash
 dlt init chess sqlalchemy
-cd chess_pipeline
-```
 
-👉 **Note:** - The `dlt init` command **automatically creates the
-`chess_pipeline` folder** for you. - It scaffolds the full project
-structure inside it. - You don't need to create the directory manually
-beforehand.
+```
 
 > The built-in `chess` source is a simple example and **does not require
 > parameters**.
