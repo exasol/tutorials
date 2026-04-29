@@ -1,7 +1,7 @@
 # 🚀 Getting Started with `dlt` + Exasol (via SQLAlchemy)
 
-You can now use Exasol as a destination in `dlt` via SQLAlchemy.\
-`sqlalchemy-exasol` version XXXX <TODO VERSION> and above support this. \
+You can now use Exasol as a destination in `dlt` via SQLAlchemy/sqlalchemy-exasol.\
+`sqlalchemy-exasol` version XXXX <TODO VERSION> and above support this.
 
 This tutorial walks you through setting up a pipeline using the built-in
 `chess` source and loading the data into Exasol.
@@ -117,7 +117,8 @@ database.
 
 > **Warning**
 >
-> Binary types such as `UUINT`, `BLOB`, `BINARY` and `VARBINARY` are currently not supported when using
+> Binary types such as `UUINT`, `BLOB`, `BINARY` and `VARBINARY` are currently not
+> supported when using
 > Exasol as a `dlt` destination via SQLAlchemy.\
 > You may currently need to cast or transform such columns to compatible types
 > before loading.
