@@ -69,7 +69,7 @@ sqlalchemy-exasol
 ## 🔌 5. Configure the SQLAlchemy Destination (Exasol)
 
 
-Example below is what a typical `secrets.toml` section to configure the SQLAlchemy Destination would look like when using a docker container for testing purposes.
+The sample below is what a typical `secrets.toml` section to configure the SQLAlchemy Destination would look like when using a docker container for testing purposes.
 
 
 ```
