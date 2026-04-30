@@ -96,11 +96,11 @@ query       = { SSLCertificate = "SSL_VERIFY_NONE" }
 
 See [DLT setup documentation](https://dlthub.com/docs/general-usage/credentials/setup) for more information on how to properly configure pipelines.
 
-For the purposes of this tutorial we spun up an Exasol docker-db using:
+For the purpose of this tutorial, we spun up an Exasol Docker database using:
 ```
 docker run --name exasoldb -p 127.0.0.1:9563:8563 --detach --privileged --stop-timeout 120  exasol/docker-db:2025.2.0
 ```
-(More info on Exasol docker-db and how to set it up can be found [here](https://hub.docker.com/r/exasol/docker-db/).)
+(More info on Exasol's Docker Database and how to set it up can be found on the [exasol/docker-db page](https://hub.docker.com/r/exasol/docker-db/).)
 
 ------------------------------------------------------------------------
 
