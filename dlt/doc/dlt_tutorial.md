@@ -91,7 +91,7 @@ query       = { SSLCertificate = "SSL_VERIFY_NONE" }
 5.  **Defaults in code**
 
 👉 Environment variables override everything.\
-👉 Project config overrides global config. Make sure to \
+👉 Project config overrides global config.\
 👉 Global config is useful for shared defaults across projects.
 
 See [DLT setup documentation](https://dlthub.com/docs/general-usage/credentials/setup) for more information on how to properly configure pipelines.
