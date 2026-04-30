@@ -1,7 +1,7 @@
 # 🚀 Getting Started with `dlt` + Exasol (via SQLAlchemy)
 
 You can now use Exasol as a destination in `dlt` via SQLAlchemy/sqlalchemy-exasol.\
-`sqlalchemy-exasol` version XXXX <TODO VERSION> and above support this.
+`sqlalchemy-exasol` version 7.0.0 and above support this.
 
 This tutorial walks you through setting up a pipeline using the built-in
 `chess` source and loading the data into Exasol.
